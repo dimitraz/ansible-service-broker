@@ -1,5 +1,5 @@
 REGISTRY         ?= docker.io
-ORG              ?= ansibleplaybookbundle
+ORG              ?= dimitraz
 TAG              ?= latest
 BROKER_IMAGE     ?= $(REGISTRY)/$(ORG)/origin-ansible-service-broker
 VARS             ?= ""

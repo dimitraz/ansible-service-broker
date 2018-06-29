@@ -51,6 +51,7 @@ type ParameterDescriptor struct {
 	Title       string      `json:"title"`
 	Type        string      `json:"type"`
 	Description string      `json:"description,omitempty"`
+	DocURL      string      `json:"doc_url,omitempty"`
 	Default     interface{} `json:"default,omitempty"`
 
 	// string validators
@@ -232,6 +233,7 @@ const (
 
 // SpecLogDump - log spec for debug
 func SpecLogDump(spec *Spec) {
+	log.Debug("test %+v", spec)
 	log.Debug("============================================================")
 	log.Debug("Spec: %s", spec.ID)
 	log.Debug("============================================================")
@@ -248,6 +250,7 @@ func SpecLogDump(spec *Spec) {
 			log.Debug("  Title: %s", param.Title)
 			log.Debug("  Type: %s", param.Type)
 			log.Debug("  Description: %s", param.Description)
+			log.Debug("  DocURL: %s", param.DocURL)
 			log.Debug("  Default: %#v", param.Default)
 			log.Debug("  DeprecatedMaxlength: %d", param.DeprecatedMaxlength)
 			log.Debug("  MaxLength: %d", param.MaxLength)
