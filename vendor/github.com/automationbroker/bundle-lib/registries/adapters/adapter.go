@@ -149,6 +149,7 @@ func imageToSpec(req *http.Request, image string) (*apb.Spec, error) {
 
 	log.Debugf("adapter::imageToSpec -> Got plans %+v", spec.Plans)
 	log.Debugf("Successfully converted Image %s into Spec", spec.Image)
+	apb.SpecLogDump(spec)
 
 	return spec, nil
 }

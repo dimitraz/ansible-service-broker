@@ -25,13 +25,15 @@ import (
 
 	"github.com/automationbroker/bundle-lib/apb"
 	schema "github.com/lestrrat/go-jsschema"
+	log "github.com/sirupsen/logrus"
 )
 
 type formItem struct {
-	Key   string        `json:"key,omitempty"`
-	Title string        `json:"title,omitempty"`
-	Type  string        `json:"type,omitempty"`
-	Items []interface{} `json:"items,omitempty"`
+	Key     string        `json:"key,omitempty"`
+	Title   string        `json:"title,omitempty"`
+	Type    string        `json:"type,omitempty"`
+	Tooltip string        `json:"tooltip,omitempty"`
+	Items   []interface{} `json:"items,omitempty"`
 }
 
 // SpecToService converts an apb Spec into a Service usable by the service
@@ -147,7 +149,9 @@ func createFormDefinition(params []apb.ParameterDescriptor) []interface{} {
 		var numItems int
 
 		pd := params[paramIdx]
+
 		if pd.DisplayGroup == "" {
+			log.Debug("test %+v", pd)
 			item, numItems = createUIFormItem(pd, paramIdx)
 		} else {
 			item, numItems = createUIFormGroup(params, pd.DisplayGroup, paramIdx)
@@ -156,6 +160,7 @@ func createFormDefinition(params []apb.ParameterDescriptor) []interface{} {
 
 		formDefinition = append(formDefinition, item)
 	}
+
 	return formDefinition
 }
 
@@ -186,16 +191,21 @@ func createUIFormItem(pd apb.ParameterDescriptor, paramIndex int) (interface{}, 
 	var item interface{}
 
 	// if the name is the only key, it defaults to a string instead of a dictionary
-	if pd.DisplayType == "" {
-		item = pd.Name
-	} else {
-		item = formItem{
-			Key:  pd.Name,
-			Type: pd.DisplayType,
-		}
+	item = formItem{
+		Key:     pd.Name,
+		Type:    getDisplayType(pd.DisplayType),
+		Tooltip: pd.Tooltip,
 	}
 
 	return item, 1
+}
+
+// return 'string' as default display type
+func getDisplayType(displayType string) string {
+	if displayType == "" {
+		return "string"
+	}
+	return displayType
 }
 
 // getType transforms an apb parameter type to a JSON Schema type
